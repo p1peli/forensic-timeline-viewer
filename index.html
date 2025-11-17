@@ -121,12 +121,10 @@
 
 <body>
 
-    <h1>Email Timeline Viewer</h1>
+    <h1>Forensic Timeline Viewer</h1>
 
-    <!-- TIMELINE -->
     <div id="timeline"></div>
 
-    <!-- FILE INPUT CONTROL -->
     <div id="tools-panel">
         <div class="tool-section">
             <label><strong>Inbox (JSON):</strong></label>
@@ -164,7 +162,18 @@
         <div class="tool-section">
             <div id="excluded-list"><strong>Excluded:</strong><br></div>
         </div>
+    </div>
 
+    <div id="tools-panel">
+        <div class="tool-section">
+            <label><strong>From:</strong></label>
+            <input type="datetime-local" id="filter-from">
+        </div>
+        <div class="tool-section">
+            <label><strong>To:</strong></label>
+            <input type="datetime-local" id="filter-to">
+        </div>
+        <button id="apply-filter">Apply Filter</button>
     </div>
 
     <script src="timeline.js"></script>

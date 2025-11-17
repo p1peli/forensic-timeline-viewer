@@ -16,6 +16,8 @@ let excludedSenders = new Set();
 let imageEvents = [];
 
 document.getElementById("image-input").addEventListener("change", async (event) => {
+    imageEvents.length = 0;
+    
     const files = event.target.files;
     for (const file of files) {
         const timestamp = new Date(file.lastModified).toISOString(); 
@@ -25,7 +27,7 @@ document.getElementById("image-input").addEventListener("change", async (event) 
             timestamp: timestamp
         });
     }
-    renderTimeline(); // redraw timeline with images
+    renderTimeline(); 
 });
 
 
