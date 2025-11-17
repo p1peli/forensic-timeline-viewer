@@ -32,6 +32,12 @@ document.getElementById("apply-filter").onclick = () => {
     renderTimeline();
 };
 
+document.getElementById("reset-filter").onclick = () => {
+    document.getElementById("filter-from").value = "";
+    document.getElementById("filter-to").value = "";
+    renderTimeline(); 
+};
+
 
 function loadJSON(fileInput, targetArray) {
     fileInput.addEventListener("change", (event) => {
