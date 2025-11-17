@@ -13,6 +13,20 @@ let sentEvents = [];
 let inboxEvents = [];
 let markedSenders = new Set();
 let excludedSenders = new Set();
+let imageEvents = [];
+
+document.getElementById("image-input").addEventListener("change", async (event) => {
+    const files = event.target.files;
+    for (const file of files) {
+        const timestamp = new Date(file.lastModified).toISOString(); 
+        imageEvents.push({
+            name: file.name,
+            file: file,
+            timestamp: timestamp
+        });
+    }
+    renderTimeline(); // redraw timeline with images
+});
 
 
 function loadJSON(fileInput, targetArray) {
@@ -118,7 +132,7 @@ function renderTimeline() {
 
     const filteredSent = sentEvents;
     const filteredInbox = inboxEvents;
-    const allEvents = [...filteredSent, ...filteredInbox];
+    const allEvents = [...filteredSent, ...filteredInbox, ...imageEvents];
     if(allEvents.length === 0) return;
 
 
@@ -232,4 +246,27 @@ function renderTimeline() {
         timeline.appendChild(dot);
 
     }
+
+    // Image dots (middle)
+    for (const img of imageEvents) {
+        const t = new Date(img.timestamp).getTime();
+        const dot = document.createElement("div");
+        dot.classList.add("dot");
+
+        dot.style.left = xPos(t) + "%";
+        dot.style.top = "0px"; // middle
+        dot.classList.add("dot-image");
+
+
+        dot.title = `Image: ${img.name}\nDate: ${img.timestamp}`;
+
+        // Optional: click → open image in new tab
+        dot.onclick = () => {
+            const url = URL.createObjectURL(img.file);
+            window.open(url);
+        };
+
+        timeline.appendChild(dot);
+    }
+
 }
