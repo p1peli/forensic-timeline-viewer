@@ -16,8 +16,6 @@ let excludedSenders = new Set();
 let imageEvents = [];
 
 document.getElementById("image-input").addEventListener("change", async (event) => {
-    imageEvents.length = 0;
-    
     const files = event.target.files;
     for (const file of files) {
         const timestamp = new Date(file.lastModified).toISOString(); 
@@ -29,6 +27,10 @@ document.getElementById("image-input").addEventListener("change", async (event) 
     }
     renderTimeline(); 
 });
+
+document.getElementById("apply-filter").onclick = () => {
+    renderTimeline();
+};
 
 
 function loadJSON(fileInput, targetArray) {
@@ -132,9 +134,31 @@ function renderTimeline() {
     const timeline = document.getElementById("timeline");
     timeline.innerHTML = ""; // clear timeline
 
-    const filteredSent = sentEvents;
-    const filteredInbox = inboxEvents;
-    const allEvents = [...filteredSent, ...filteredInbox, ...imageEvents];
+
+    const fromInput = document.getElementById("filter-from").value;
+    const toInput   = document.getElementById("filter-to").value;
+
+    let fromTime = fromInput ? new Date(fromInput).getTime() : null;
+    let toTime   = toInput   ? new Date(toInput).getTime() : null;
+
+    // filter events by range
+    const filteredInbox = inboxEvents.filter(e => {
+        const t = new Date(e.timestamp).getTime();
+        return (!fromTime || t >= fromTime) && (!toTime || t <= toTime);
+    });
+    const filteredSent = sentEvents.filter(e => {
+        const t = new Date(e.timestamp).getTime();
+        return (!fromTime || t >= fromTime) && (!toTime || t <= toTime);
+    });
+    const filteredImages = imageEvents.filter(e => {
+        const t = new Date(e.timestamp).getTime();
+        return (!fromTime || t >= fromTime) && (!toTime || t <= toTime);
+    });
+
+
+    //const filteredSent = sentEvents;
+    //const filteredInbox = inboxEvents;
+    const allEvents = [...filteredSent, ...filteredInbox, ...filteredImages];
     if(allEvents.length === 0) return;
 
 
