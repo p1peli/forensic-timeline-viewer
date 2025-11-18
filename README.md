@@ -31,3 +31,23 @@ Sent and inbox email JSON files must contain an array of objects.
   "timestamp": "2023-02-12T11:45:00"
 }
 ```
+
+## Parsing Thunderbird MBOX Files (Optional)
+
+If you want to generate the required JSON files directly from your **Thunderbird email archives**, you can use the included Python script:
+
+`parse_emails.py`
+
+This script reads a Thunderbird MBOX file, extracts metadata (sender, receivers, subject, timestamp, and body), and exports it into a clean JSON format that the Forensic Timeline Viewer can load.
+
+---
+
+### 📦 Requirements
+
+- Python 3.8+
+- Install dependencies:
+
+```bash
+pip install python-dateutil
+```
+
