@@ -166,12 +166,34 @@ function renderTimeline() {
         return (!fromTime || t >= fromTime) && (!toTime || t <= toTime);
     });
 
+    //We need to flatten this to be able to calculate time, since we store timestamps in an array
+    const flatBrowserEvents = browserEvents.flatMap(e =>
+        e.timestamps.map(ts => ({
+            type: "browser",
+            title: e.title,
+            url: e.url,
+            visit_count: e.visit_count,
+            timestamp: ts
+        }))
+    );
+
+    const filteredBrowser = flatBrowserEvents.filter(e => {
+        const t = new Date(e.timestamp).getTime();
+        return (!fromTime || t >= fromTime) && (!toTime || t <= toTime);
+    });
+
+
+
+
+    //console.log(filteredImages); 
+    //console.log(filteredBrowser); 
 
     //const filteredSent = sentEvents;
     //const filteredInbox = inboxEvents;
-    const allEvents = [...filteredSent, ...filteredInbox, ...filteredImages];
+    const allEvents = [...filteredSent, ...filteredInbox, ...filteredImages, ...filteredBrowser];
     if(allEvents.length === 0) return;
 
+    console.log(allEvents); 
 
 
     // Normalize the timeline
@@ -296,7 +318,6 @@ function renderTimeline() {
 
         dot.title = `Image: ${img.name}\nDate: ${img.timestamp}`;
 
-        // Optional: click → open image in new tab
         dot.onclick = () => {
             const url = URL.createObjectURL(img.file);
             window.open(url);
@@ -306,22 +327,25 @@ function renderTimeline() {
     }
 
     // Browser dots (bottom)
-    for (const event of browserEvents) {
-        for (const ts of event.timestamps) {
-            const t = new Date(ts).getTime();
-            
-            // Filter by timeline range
-            if ((fromTime && t < fromTime) || (toTime && t > toTime)) continue;
+    for (const event of flatBrowserEvents) {
+        const t = new Date(event.timestamp).getTime();
 
-            const dot = document.createElement("div");
-            dot.classList.add("dot", "dot-browser");
-            dot.style.left = xPos(t) + "%";
-            dot.style.top = "40px"; // place below or above images
-            dot.title = `${event.title}\n${event.url}\nVisits: ${event.visit_count}\nDate: ${ts}`;
+        const dot = document.createElement("div");
+        dot.classList.add("dot", "dot-browser");
+        dot.style.left = xPos(t) + "%";
+        dot.style.top = "40px";
 
-            dot.onclick = () => window.open(event.url);
 
-            timeline.appendChild(dot);
-        }
+        dot.title =
+            `${event.title}\n` +
+            `${event.url}\n` +
+            `Visits: ${event.visit_count}\n` +
+            `Date: ${event.timestamp}`;
+
+
+        dot.onclick = () => window.open(event.url);
+
+        timeline.appendChild(dot);
     }
+
 }
