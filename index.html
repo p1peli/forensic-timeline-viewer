@@ -68,7 +68,7 @@
         }
 
         #tools-panel {
-            background: #1f1f1f;  /* slightly lighter dark panel */
+            background: #1f1f1f; 
             border-radius: 10px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.6);
             padding: 15px;
@@ -136,9 +136,19 @@
             <input type="file" id="json-sent" accept=".json">
         </div>
 
+    </div>
+
+    <div id="tools-panel">
+        <h3>Advanced: </h3>
+
         <div class="tool-section"> 
             <label><strong>Images:</strong></label>
             <input type="file" id="image-input" accept="image/*" multiple>
+        </div>
+
+        <div class="tool-selection">
+            <label><strong>Browser History:</strong></label>
+            <input type="file" id="json-browser" accept=".json">
         </div>
     </div>
 
