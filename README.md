@@ -1,1 +1,53 @@
-# forensic-timeline-viewer
+# Forensic Timeline Viewer
+
+A lightweight browser-based tool for visualizing email activity on a unified interactive timeline.  
+No installation required — everything runs locally in your browser.
+
+🔗 **Live Demo:**  
+https://p1peli.github.io/forensic-timeline-viewer/
+
+---
+
+## JSON Format
+
+Sent and inbox email JSON files must contain an array of objects.
+
+### 📥 Inbox example
+```json
+{
+  "sender": "alice@example.com",
+  "subject": "Hello",
+  "body": "Message text...",
+  "timestamp": "2023-02-12T10:22:00"
+}
+```
+### 📤 Sent example
+```json
+{
+  "sender": "me@example.com",
+  "receivers": ["bob@example.com", "carol@example.com"],
+  "subject": "Re: Hello",
+  "body": "Reply text...",
+  "timestamp": "2023-02-12T11:45:00"
+}
+```
+
+## Parsing Thunderbird MBOX Files (Optional)
+
+If you want to generate the required JSON files directly from your **Thunderbird email archives**, you can use the included Python script:
+
+`parse_emails.py`
+
+This script reads a Thunderbird MBOX file, extracts metadata (sender, receivers, subject, timestamp, and body), and exports it into a clean JSON format that the Forensic Timeline Viewer can load.
+
+---
+
+### 📦 Requirements
+
+- Python 3.8+
+- Install dependencies:
+
+```bash
+pip install python-dateutil
+```
+
