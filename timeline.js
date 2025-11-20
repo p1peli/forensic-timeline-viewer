@@ -15,6 +15,8 @@ let markedSenders = new Set();
 let excludedSenders = new Set();
 let imageEvents = [];
 
+let browserEvents = []; 
+
 document.getElementById("image-input").addEventListener("change", async (event) => {
     const files = event.target.files;
     for (const file of files) {
@@ -61,6 +63,9 @@ function loadJSON(fileInput, targetArray) {
 
 loadJSON(document.getElementById("json-sent"), sentEvents);
 loadJSON(document.getElementById("json-inbox"), inboxEvents);
+
+loadJSON(document.getElementById("json-browser"), browserEvents); 
+
 
 // Add address to exclude list
 document.getElementById("add-exclude").onclick = () => {
@@ -224,7 +229,6 @@ function renderTimeline() {
         };
 
         timeline.appendChild(dot);
-
     }
 
     // Sent dots (top)
@@ -301,4 +305,23 @@ function renderTimeline() {
         timeline.appendChild(dot);
     }
 
+    // Browser dots (bottom)
+    for (const event of browserEvents) {
+        for (const ts of event.timestamps) {
+            const t = new Date(ts).getTime();
+            
+            // Filter by timeline range
+            if ((fromTime && t < fromTime) || (toTime && t > toTime)) continue;
+
+            const dot = document.createElement("div");
+            dot.classList.add("dot", "dot-browser");
+            dot.style.left = xPos(t) + "%";
+            dot.style.top = "40px"; // place below or above images
+            dot.title = `${event.title}\n${event.url}\nVisits: ${event.visit_count}\nDate: ${ts}`;
+
+            dot.onclick = () => window.open(event.url);
+
+            timeline.appendChild(dot);
+        }
+    }
 }
